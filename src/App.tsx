@@ -30,11 +30,8 @@ export default function App() {
     <div className="app">
       <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
         <div className="sidebar-brand">
-          <span className="login-bolt">⚡</span>
-          <div>
-            <strong>Power Express</strong>
-            <small>Content Manager</small>
-          </div>
+          <img src="./logo-light.png" alt="Power Express" className="sidebar-logo" />
+          <small>Content Manager</small>
         </div>
         <nav>
           {TABLES.map((t) => (

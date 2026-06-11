@@ -28,8 +28,7 @@ export default function Login() {
     <div className="login-page">
       <form className="login-card" onSubmit={submit}>
         <div className="login-brand">
-          <span className="login-bolt">⚡</span>
-          <h1>Power Express</h1>
+          <img src="./logo-dark.png" alt="Power Express" className="login-logo" />
           <p>Content Manager · ระบบจัดการเนื้อหาเว็บไซต์</p>
         </div>
         <label>

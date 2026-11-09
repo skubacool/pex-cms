@@ -5,7 +5,7 @@ without touching the website code. It reads and writes the same Supabase
 tables the team already edits in the Supabase Table Editor — both editing
 methods work side by side.
 
-- **CMS URL:** https://cms.powerexpress1980.com (the older https://skubacool.github.io/pex-cms/ keeps working and is updated by the same deploy)
+- **CMS URL:** https://cms.powerexpress1980.com (the older https://skubacool.github.io/pex-cms/ now only redirects here)
 - **Website:** https://powerexpress1980.com
 - **Supabase project:** https://supabase.com/dashboard/project/yttnuerixoafmhpdghdm
 - **Editing guide for the team:** see [ADMIN-GUIDE.md](ADMIN-GUIDE.md)
@@ -59,7 +59,7 @@ npm run dev        # http://localhost:5174
 ## Deploying updates to the CMS
 
 ```bash
-npm run deploy     # builds, publishes to cms.powerexpress1980.com, then refreshes the GitHub Pages copy
+npm run deploy     # builds and publishes to cms.powerexpress1980.com
 ```
 
 `cms.powerexpress1980.com` is a small Cloudflare Worker ([`wrangler.toml`](wrangler.toml))

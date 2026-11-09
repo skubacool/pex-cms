@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { detectProvinceId, provinceById } from './utils/province-utils';
 
 // Same Supabase project + publishable key the live website already uses.
 export const SUPABASE_URL = 'https://yttnuerixoafmhpdghdm.supabase.co';
@@ -38,6 +39,8 @@ export type Field =
       multiline?: boolean;
       rows?: number;
       hint?: string;
+      // Show which province the website map will light up for this text.
+      provinceMap?: boolean;
     }
   | { kind: 'image'; col: string; label: string; hint?: string }
   | {
@@ -58,10 +61,19 @@ export interface TableConfig {
   rowMeta?: (row: Row) => string;
   orderBy?: string; // defaults to id
   fields: Field[];
+  // List page shows which provinces the website map highlights, and flags unreadable locations.
+  provinceCoverage?: boolean;
 }
 
 const t = (row: Row, base: string) =>
   row[`${base}_en`] || row[`${base}_th`] || '';
+
+const provinceLabel = (row: Row) => {
+  const p = provinceById(
+    detectProvinceId(row.location_th, row.location_en) ?? ''
+  );
+  return p ? `📍 ${p.th} · ${p.en}` : '';
+};
 
 export const TABLES: TableConfig[] = [
   {
@@ -98,16 +110,28 @@ export const TABLES: TableConfig[] = [
     emoji: '☀️',
     description:
       'The project showcase pages (โครงการ). Home-page statistics update automatically from this list.',
+    provinceCoverage: true,
     rowTitle: (r) => t(r, 'title') || `Project #${r.id}`,
     rowImage: (r) => r.thumbnail,
     rowMeta: (r) =>
-      [t(r, 'client'), r.capacity ? `${r.capacity} kWp` : '', r.completion]
+      [
+        t(r, 'client'),
+        r.capacity ? `${r.capacity} kWp` : '',
+        r.completion,
+        provinceLabel(r),
+      ]
         .filter(Boolean)
         .join(' · '),
     fields: [
       { kind: 'localized', base: 'title', label: 'Project title' },
       { kind: 'localized', base: 'client', label: 'Client name' },
-      { kind: 'localized', base: 'location', label: 'Location' },
+      {
+        kind: 'localized',
+        base: 'location',
+        label: 'Location',
+        provinceMap: true,
+        hint: 'Include the province, e.g. "จ.ชลบุรี" / "Chon Buri". The Thailand map on the website colours in every province that has a project, automatically.',
+      },
       {
         kind: 'number',
         col: 'capacity',

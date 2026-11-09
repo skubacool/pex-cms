@@ -6,6 +6,7 @@ import {
   TableConfig,
   supabase,
 } from './config';
+import { detectProvinceId, provinceById } from './utils/province-utils';
 
 // ---------------------------------------------------------------- helpers
 
@@ -84,7 +85,83 @@ function LocalizedField(props: {
           );
         })}
       </div>
+      {field.provinceMap && (
+        <ProvinceHint th={draft[`${field.base}_th`]} en={draft[`${field.base}_en`]} />
+      )}
     </FieldShell>
+  );
+}
+
+// Same detector the website uses, so what the team sees here is what the map will do.
+function ProvinceHint(props: { th?: string; en?: string }) {
+  const th = props.th ?? '';
+  const en = props.en ?? '';
+  if (!th.trim() && !en.trim()) return null;
+  const p = provinceById(detectProvinceId(th, en) ?? '');
+  if (p) {
+    return (
+      <div className="province-hint">
+        🗺 The website map will colour in <strong>{p.th}</strong> ({p.en}). ·
+        แผนที่บนเว็บไซต์จะแสดงจังหวัด <strong>{p.th}</strong>
+      </div>
+    );
+  }
+  return (
+    <div className="province-hint warn">
+      ⚠ No province recognised, so this project will not appear on the website map. Add
+      the province, e.g. “จ.ชลบุรี” and “Chon Buri”. · ยังอ่านจังหวัดไม่ได้
+      กรุณาใส่ชื่อจังหวัด เช่น “จ.ชลบุรี”
+    </div>
+  );
+}
+
+// Projects list: which provinces the map shows, and which projects it cannot place.
+function ProvinceCoverage({ rows }: { rows: Row[] }) {
+  const { names, unknown } = useMemo(() => {
+    const ids = new Set<string>();
+    const unknown: Row[] = [];
+    rows.forEach((r) => {
+      const id = detectProvinceId(r.location_th, r.location_en);
+      if (id) ids.add(id);
+      else unknown.push(r);
+    });
+    const names = Array.from(ids)
+      .map((id) => provinceById(id))
+      .filter((p): p is NonNullable<typeof p> => !!p)
+      .sort((a, b) => a.th.localeCompare(b.th, 'th'));
+    return { names, unknown };
+  }, [rows]);
+
+  if (rows.length === 0) return null;
+  return (
+    <div className={`province-panel ${unknown.length ? 'warn' : ''}`}>
+      <div>
+        🗺 Website map: <strong>{names.length}</strong> provinces highlighted from{' '}
+        <strong>{rows.length - unknown.length}</strong> projects · แผนที่ประเทศไทยบนเว็บไซต์
+        แสดง <strong>{names.length}</strong> จังหวัด
+      </div>
+      {names.length > 0 && (
+        <div className="province-names">{names.map((p) => p.th).join(' · ')}</div>
+      )}
+      {unknown.length > 0 && (
+        <>
+          <div style={{ marginTop: 10 }}>
+            ⚠ {unknown.length} project{unknown.length > 1 ? 's have' : ' has'} no readable
+            province, so {unknown.length > 1 ? 'they are' : 'it is'} not on the map. Edit
+            the Location and add the province name. · ยังอ่านจังหวัดไม่ได้
+            กรุณาแก้ช่อง Location และใส่ชื่อจังหวัด
+          </div>
+          <ul>
+            {unknown.map((r) => (
+              <li key={r.id}>
+                {r.title_en || r.title_th || `Project #${r.id}`} —{' '}
+                <em>{r.location_th || r.location_en || '(no location)'}</em>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
   );
 }
 
@@ -553,6 +630,10 @@ export default function CollectionEditor({ cfg }: { cfg: TableConfig }) {
           + Add new · เพิ่มใหม่
         </button>
       </div>
+
+      {cfg.provinceCoverage && !loading && !loadError && (
+        <ProvinceCoverage rows={rows} />
+      )}
 
       <input
         type="search"

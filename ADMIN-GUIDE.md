@@ -102,6 +102,24 @@ The statistics on the home page (number of projects, total capacity)
 update **automatically** from this list — you never edit them directly.
 สถิติหน้าแรกคำนวณอัตโนมัติจากรายการโครงการ ไม่ต้องแก้เอง
 
+### The Thailand map · แผนที่ประเทศไทย
+The map on the home page and the About page colours in every province that
+has a project — **you never edit or upload the map.** It reads the province
+from the **Location** box of each project.
+แผนที่บนหน้าแรกและหน้า "เกี่ยวกับเรา" ระบายสีจังหวัดที่มีโครงการให้อัตโนมัติ
+โดยอ่านจังหวัดจากช่อง Location ของแต่ละโครงการ
+
+- Write the province in the Location, e.g. **จ.ชลบุรี** / **Chon Buri**.
+  Any normal address that ends with the province works too.
+- Under the Location boxes a green line tells you which province the map will
+  colour. If you see an **orange warning**, no province was recognised — add
+  the province name.
+  (เส้นสีเขียวใต้ช่อง Location บอกจังหวัดที่จะถูกระบายสี
+  ถ้าเป็นกล่องสีส้ม แปลว่าอ่านจังหวัดไม่ได้ ให้เติมชื่อจังหวัด)
+- The top of the Projects list shows how many provinces are on the map and
+  lists any project that can't be placed.
+- The number "N projects in M provinces" under the map updates by itself.
+
 ### Remove one · ลบ
 Click **Delete** and confirm. **Careful — this cannot be undone.**
 (ระวัง — การลบย้อนกลับไม่ได้)

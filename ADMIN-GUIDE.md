@@ -10,7 +10,7 @@ Everything is done in a normal web page with forms and buttons.
 ## 1. Logging in · เข้าสู่ระบบ
 
 1. Open this address in your browser · เปิดลิงก์นี้ในเบราว์เซอร์:
-   **https://skubacool.github.io/pex-cms/**
+   **https://cms.powerexpress1980.com**
 2. Type your **email** and **password** (given to you by the administrator).
    กรอก **อีเมล** และ **รหัสผ่าน** (ที่ได้รับจากผู้ดูแลระบบ)
 3. Click **Sign in · เข้าสู่ระบบ**.

@@ -5,7 +5,7 @@ without touching the website code. It reads and writes the same Supabase
 tables the team already edits in the Supabase Table Editor — both editing
 methods work side by side.
 
-- **CMS URL:** https://skubacool.github.io/pex-cms/
+- **CMS URL:** https://cms.powerexpress1980.com (the older https://skubacool.github.io/pex-cms/ keeps working and is updated by the same deploy)
 - **Website:** https://powerexpress1980.com
 - **Supabase project:** https://supabase.com/dashboard/project/yttnuerixoafmhpdghdm
 - **Editing guide for the team:** see [ADMIN-GUIDE.md](ADMIN-GUIDE.md)
@@ -59,8 +59,13 @@ npm run dev        # http://localhost:5174
 ## Deploying updates to the CMS
 
 ```bash
-npm run deploy     # builds and pushes to the gh-pages branch
+npm run deploy     # builds, publishes to cms.powerexpress1980.com, then refreshes the GitHub Pages copy
 ```
+
+`cms.powerexpress1980.com` is a small Cloudflare Worker ([`wrangler.toml`](wrangler.toml))
+that serves the built files in `dist/`. Wrangler must be logged in to the
+Cloudflare account that owns powerexpress1980.com (`npx wrangler login`).
+Cloudflare creates the DNS record and HTTPS certificate for the custom domain.
 
 The app is plain Vite + React + TypeScript. All content configuration
 (tables, fields, labels) lives in [`src/config.ts`](src/config.ts) — to add
